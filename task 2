@@ -1,0 +1,151 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+const int MAX_MARKS = 10;
+
+struct Student {
+    string surname;
+    int marks[MAX_MARKS];
+    int numMarks;
+};
+
+void printStudentInfo(const Student& student) {
+    cout << "surname: " << student.surname << endl;
+
+    int sum = 0;
+    for (int i = 0; i < student.numMarks; i++) {
+        sum += student.marks[i];
+    }
+
+    double average = static_cast<double>(sum) / student.numMarks;
+    cout << "average mark: " << average << endl;
+}
+
+int countExcellentStudents(const Student* students, int numStudents) {
+    int count = 0;
+    for (int i = 0; i < numStudents; i++) {
+        bool hasExcellentMarks = true;
+        for (int j = 0; j < students[i].numMarks; j++) {
+            if (students[i].marks[j] < 5) {
+                hasExcellentMarks = false;
+                break;
+            }
+        }
+        if (hasExcellentMarks) {
+            count++;
+        }
+    }
+    return count;
+}
+
+double calculatePercentageWithoutThrees(const Student* students, int numStudents) {
+    int count = 0;
+    for (int i = 0; i < numStudents; i++) {
+        bool hasThrees = false;
+        for (int j = 0; j < students[i].numMarks; j++) {
+            if (students[i].marks[j] == 3) {
+                hasThrees = true;
+                break;
+            }
+        }
+        if (!hasThrees) {
+            count++;
+        }
+    }
+    return static_cast<double>(count) / numStudents * 100.0;
+}
+
+void printPhysicsTopMarks(const Student* students, int numStudents) {
+    cout << "students with Physics marks \"5\" or \"4\": " << endl;
+    for (int i = 0; i < numStudents; i++) {
+        bool hasTopMark = false;
+        for (int j = 0; j < students[i].numMarks; j++) {
+            if (students[i].marks[j] == 5 || students[i].marks[j] == 4) {
+                hasTopMark = true;
+                break;
+            }
+        }
+        if (hasTopMark) {
+            cout << students[i].surname << endl;
+        }
+    }
+}
+
+void calculateSubjectAverages(const Student* students, int numStudents) {
+    int totalMarks[MAX_MARKS] = { 0 };
+    int numStudentsWithMarks[MAX_MARKS] = { 0 };
+
+    for (int i = 0; i < numStudents; i++) {
+        for (int j = 0; j < students[i].numMarks; j++) {
+            totalMarks[j] += students[i].marks[j];
+            numStudentsWithMarks[j]++;
+        }
+    }
+
+    cout << "average mark for each subject: " << endl;
+    for (int i = 0; i < MAX_MARKS; i++) {
+        if (numStudentsWithMarks[i] > 0) {
+            double average = static_cast<double>(totalMarks[i]) / numStudentsWithMarks[i];
+            cout << "subject " << i + 1 << ": " << average << endl;
+        }
+    }
+}
+
+void countExcellentMarksPerSubject(const Student* students, int numStudents) {
+    int excellentMarks[MAX_MARKS] = { 0 };
+
+    for (int i = 0; i < numStudents; i++) {
+        for (int j = 0; j < students[i].numMarks; j++) {
+            if (students[i].marks[j] == 5) {
+                excellentMarks[j]++;
+            }
+        }
+    }
+
+    cout << "number of \"excellent\" marks for each subject: " << endl;
+    for (int i = 0; i < MAX_MARKS; i++) {
+        cout << "subject " << i + 1 << ": " << excellentMarks[i] << endl;
+    }
+}
+
+int main() {
+    Student students[3];
+
+    students[0].surname = "Ivanov";
+    students[0].marks[0] = 5;
+    students[0].marks[1] = 4;
+    students[0].marks[2] = 5;
+    students[0].numMarks = 3;
+
+    students[1].surname = "Petrov";
+    students[1].marks[0] = 4;
+    students[1].marks[1] = 3;
+    students[1].marks[2] = 5;
+    students[1].numMarks = 3;
+
+    students[2].surname = "Sidorov";
+    students[2].marks[0] = 5;
+    students[2].marks[1] = 5;
+    students[2].marks[2] = 5;
+    students[2].numMarks = 3;
+
+    cout << "student information:\n";
+    for (int i = 0; i < 3; i++) {
+        printStudentInfo(students[i]);
+    }
+
+    int excellentCount = countExcellentStudents(students, 3);
+    cout << "number of students with \"excellent\" grades: " << excellentCount << endl;
+
+    double percentageWithoutThrees = calculatePercentageWithoutThrees(students, 3); 
+    cout << "percentage of students without grade \"3\": " << percentageWithoutThrees << "%" << endl;
+
+    printPhysicsTopMarks(students, 3);
+
+    calculateSubjectAverages(students, 3);
+
+    countExcellentMarksPerSubject(students, 3);
+
+   
+}
